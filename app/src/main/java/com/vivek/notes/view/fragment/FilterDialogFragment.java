@@ -12,12 +12,12 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.vivek.notes.R;
-import com.vivek.notes.databinding.FragmentSortBinding;
+import com.vivek.notes.databinding.DialogFragmentFilterBinding;
 import com.vivek.notes.viewmodel.ShowNotesViewModel;
 
-public class SortDialogFragment extends BottomSheetDialogFragment {
+public class FilterDialogFragment extends BottomSheetDialogFragment {
 
-    private FragmentSortBinding binding;
+    private DialogFragmentFilterBinding binding;
     private View rootView;
 
     private ShowNotesViewModel showNotesViewModel;
@@ -25,7 +25,7 @@ public class SortDialogFragment extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_sort, container,false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.dialog_fragment_filter, container,false);
         showNotesViewModel = ViewModelProviders.of(getActivity()).get(ShowNotesViewModel.class);
         binding.setViewModel(showNotesViewModel);
         rootView = binding.getRoot();
@@ -34,16 +34,14 @@ public class SortDialogFragment extends BottomSheetDialogFragment {
     }
 
     private void setClickListeners(){
-        binding.oldestTv.setOnClickListener(view -> {
-            showNotesViewModel.oldestClicked();
+        binding.allNoteFilter.setOnClickListener(view -> {
+            showNotesViewModel.allNotesClicked();
             dismiss();
         });
 
-        binding.newestTv.setOnClickListener(view -> {
-            showNotesViewModel.newestClicked();
+        binding.onlyMediaFilter.setOnClickListener(view -> {
+            showNotesViewModel.mediaOnlyClicked();
             dismiss();
         });
     }
-
-
 }

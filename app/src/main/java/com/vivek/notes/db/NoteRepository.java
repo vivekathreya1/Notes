@@ -12,22 +12,17 @@ import java.util.List;
 public class NoteRepository {
     private NoteDao noteDao;
 
-    public NoteRepository(Context context){
+    public NoteRepository(Context context) {
         AppDatabase db = AppDatabase.getDbInstance(context);
         noteDao = db.noteDao();
     }
 
-    public LiveData<List<Note>> getAllNotesInDesc() {
-        return noteDao.getNoteListinDesc();
+    public LiveData<List<Note>> getAllNotes(boolean isAsc) {
+
+        return noteDao.getNoteList(isAsc);
+//        return noteDao.getNoteListinDesc();
     }
 
-    public LiveData<List<Note>> getSearchResult(String searchString) {
-        return noteDao.getSearchResult(searchString);
-    }
-
-    public LiveData<List<Note>> getAllNotesInAsc() {
-        return noteDao.getNoteListInAsc();
-    }
 
     public Long insert(Note note) {
         InsertAsyncTask task = new InsertAsyncTask(noteDao);
@@ -50,6 +45,31 @@ public class NoteRepository {
         @Override
         protected Long doInBackground(final Note... params) {
             return mAsyncTaskDao.insert(params[0]);
+        }
+    }
+
+
+    public List<Note> getSearchResults(String query) {
+        SearchAsyncTask task = new SearchAsyncTask(noteDao);
+        List<Note> noteList = null;
+        try {
+            noteList = task.execute(query).get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return noteList;
+    }
+
+    private static class SearchAsyncTask extends AsyncTask<String, Void, List<Note>> {
+        private NoteDao mAsyncTaskDao;
+
+        SearchAsyncTask(NoteDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected List<Note> doInBackground(String... strings) {
+            return mAsyncTaskDao.getSearchResult(strings[0]);
         }
     }
 

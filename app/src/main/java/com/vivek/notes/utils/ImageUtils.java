@@ -23,6 +23,7 @@ public class ImageUtils {
             float scaleHeight = ((float) newHeight) / height;
             Matrix matrix = new Matrix();
             matrix.postScale(scaleWidth, scaleHeight);
+            matrix.postRotate(90);
             newBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false);
         } catch (Exception e) {
             e.printStackTrace();

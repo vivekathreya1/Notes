@@ -2,6 +2,7 @@ package com.vivek.notes.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,8 +15,13 @@ public class BindingAdapters {
 
     @BindingAdapter({"bind:imagePath"})
     public static void loadImage(ImageView view, String imagePath) {
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-        view.setImageBitmap(bitmap);
+        if(imagePath!=null){
+            Matrix matrix = new Matrix();
+            matrix.postRotate(90);
+            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            view.setImageBitmap(rotatedBitmap);
+        }
     }
 
     @BindingAdapter({"bind:dateTime"})

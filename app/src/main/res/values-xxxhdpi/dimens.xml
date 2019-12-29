@@ -17,5 +17,7 @@
     <dimen name="bookmark_tv_size">16sp</dimen>
     <dimen name="moviedetail_title_size">36sp</dimen>
     <dimen name="moviedetail_subtitle_size">24sp</dimen>
+
+    <dimen name="button_height">48dp</dimen>
     
 </resources>

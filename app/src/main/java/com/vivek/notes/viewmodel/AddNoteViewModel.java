@@ -1,7 +1,6 @@
 package com.vivek.notes.viewmodel;
 
 import android.app.Application;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -10,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.vivek.notes.db.NoteRepository;
 import com.vivek.notes.model.Note;
+import com.vivek.notes.utils.Constants;
 
 public class AddNoteViewModel extends AndroidViewModel {
 
@@ -29,6 +29,10 @@ public class AddNoteViewModel extends AndroidViewModel {
 
     public void createNote(View view){
 
+        if(imageFilePath.getValue() == null){
+            imageFilePath.setValue(Constants.NO_IMAGE);
+        }
+
        long id =  noteRepository.insert(new Note(System.currentTimeMillis(), title.getValue(), desc.getValue(), imageFilePath.getValue()));
        if(id > 0){
            noteCreated.setValue(true);
@@ -36,7 +40,6 @@ public class AddNoteViewModel extends AndroidViewModel {
            noteCreated.setValue(false);
        }
 
-        Log.e(TAG, "createNote: " + id );
     }
 
     public MutableLiveData<String> getTitle() {

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.vivek.notes.viewmodel.ShowNotesViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            style="@style/BottomTvStyle"
+            android:id="@+id/allNoteFilter"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:text="@string/all_notes"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintTop_toBottomOf="@id/allNoteFilter" />
+
+        <TextView
+            style="@style/BottomTvStyle"
+            android:id="@+id/onlyMediaFilter"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:text="@string/media_only"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/allNoteFilter" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

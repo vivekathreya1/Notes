@@ -16,6 +16,12 @@
         <action
             android:id="@+id/action_showNotesFragment_to_sortFragment"
             app:destination="@id/sortFragment" />
+        <action
+            android:id="@+id/action_showNotesFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_showNotesFragment_to_filterDialogFragment"
+            app:destination="@id/filterDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/addNote"
@@ -26,5 +32,15 @@
     <dialog
         android:id="@+id/sortFragment"
         android:name="com.vivek.notes.view.fragment.SortDialogFragment"
-        tools:layout="@layout/sort_fragment"/>
+        tools:layout="@layout/fragment_sort"/>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.vivek.notes.view.fragment.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
+    <dialog
+        android:id="@+id/filterDialogFragment"
+        android:name="com.vivek.notes.view.fragment.FilterDialogFragment"
+        android:label="dialog_fragment_filter"
+        tools:layout="@layout/dialog_fragment_filter" />
 </navigation>

@@ -22,6 +22,7 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextInputStyle"
             android:id="@+id/addTitleTextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -40,11 +41,12 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextInputStyle"
             android:id="@+id/addDescTextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="@id/addTitleTextInputLayout"
-            app:layout_constraintStart_toStartOf="@id/addTitleTextInputLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/addTitleTextInputLayout">
 
             <EditText
@@ -59,20 +61,19 @@
         <ImageView
             android:id="@+id/addImage"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:src="@mipmap/ic_launcher_round"
-            app:layout_constraintBottom_toTopOf="@+id/createTv"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_photo_camera_black_24dp"
+            android:layout_marginTop="10dp"
+            android:padding="20dp"
             app:layout_constraintEnd_toEndOf="@id/addTitleTextInputLayout"
             app:layout_constraintStart_toStartOf="@id/addTitleTextInputLayout"
             app:layout_constraintTop_toBottomOf="@+id/addDescTextInputLayout" />
 
 
         <TextView
+            style="@style/ButtonStyle"
             android:id="@+id/createTv"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:gravity="center"
             android:onClick="@{viewModel::createNote}"
             android:text="@string/create"
