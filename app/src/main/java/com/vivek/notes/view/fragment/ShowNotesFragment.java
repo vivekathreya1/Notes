@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ShowNotesFragment extends Fragment {
+public class ShowNotesFragment extends Fragment implements ShowNotesAdapter.AdapterCallback {
 
     private FragmentShowNotesBinding binding;
     private ShowNotesViewModel viewModel;
@@ -44,7 +44,6 @@ public class ShowNotesFragment extends Fragment {
 
     private static boolean isAsc;
     private static boolean mediaOnly;
-    private List<Note> noteListCache;
 
 
     public ShowNotesFragment() {
@@ -56,15 +55,15 @@ public class ShowNotesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        noteListCache = new ArrayList<>();
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_show_notes, container, false);
         rootView = binding.getRoot();
         viewModel = ViewModelProviders.of(getActivity()).get(ShowNotesViewModel.class);
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
+        noteList = new ArrayList<>();
         init();
         setClickListeners();
-        setAdapter();
+//        setAdapter();
         setObservers();
         return rootView;
     }
@@ -72,7 +71,7 @@ public class ShowNotesFragment extends Fragment {
     private void init(){
         isAsc = false;
         mediaOnly = false;
-        viewModel.getDataFromDb(isAsc, "null");
+        viewModel.getDataFromDb();
     }
 
     @Override
@@ -115,64 +114,70 @@ public class ShowNotesFragment extends Fragment {
         viewModel.getAllNotes().observe(this, notes -> {
             binding.progressBar.setVisibility(View.GONE);
             noteList.clear();
-            noteListCache.clear();
             noteList.addAll(notes);
-                noteListCache.addAll(noteList);
-            adapter.notifyDataSetChanged();
+            setAdapter(setDataWithSortAndFilter());
         });
 
         viewModel.getOldestClicked().observe(this, aBoolean -> {
             if(aBoolean){
-                Collections.sort(noteList, Comparator.comparingLong(Note::getCreationTime));
-                adapter.notifyDataSetChanged();
+                binding.progressBar.setVisibility(View.VISIBLE);
+               isAsc = true;
+                setAdapter(setDataWithSortAndFilter());
             }
 
         });
 
         viewModel.getNewestClick().observe(this, aBoolean -> {
             if (aBoolean) {
-                Collections.sort(noteList, Collections.reverseOrder(Comparator.comparingLong(Note::getCreationTime)));
-                adapter.notifyDataSetChanged();
+                binding.progressBar.setVisibility(View.VISIBLE);
+               isAsc = false;
+                setAdapter(setDataWithSortAndFilter());
             }
         });
-/*
-        viewModel.getAllNotesClick().observe(this, aBoolean -> {
-            mediaOnly = aBoolean;
-            viewModel.getDataFromDb(isAsc, mediaOnly);
-            *//*if (aBoolean) {
-                Collections.sort(noteList, Comparator.comparingLong(Note::getCreationTime));
-                adapter.notifyDataSetChanged();
-            }*//*
-        });
-*/
         viewModel.getMediaOnlyClick().observe(this, aBoolean -> {
             if (aBoolean) {
-//                noteListCache.clear();
-                List<Note> mediaOnlyNotes = noteList.stream().filter(note -> note.getImagePath() != null).collect(Collectors.toList());
-                noteList.clear();
-                noteList.addAll(mediaOnlyNotes);
-                adapter.notifyDataSetChanged();
+                binding.progressBar.setVisibility(View.VISIBLE);
+                mediaOnly = true;
+                setAdapter(setDataWithSortAndFilter());
             }
         });
 
         viewModel.getAllNotesClick().observe(this, aBoolean -> {
-           /* if (aBoolean) {
-                noteList.clear();
-                noteList.addAll(noteListCache);
-                adapter.notifyDataSetChanged();
-            }*/
+            if (aBoolean) {
+                binding.progressBar.setVisibility(View.VISIBLE);
+                mediaOnly = false;
+                setAdapter(setDataWithSortAndFilter());
+            }
         });
 
     }
 
+    private List<Note> setDataWithSortAndFilter(){
+        List<Note> notes = new ArrayList<>();
+        notes.addAll(noteList);
+        if(isAsc){
+            Collections.sort(notes, Comparator.comparingLong(Note::getCreationTime));
+        }else{
+            Collections.sort(notes, Collections.reverseOrder(Comparator.comparingLong(Note::getCreationTime)));
+        }
 
-    private void setAdapter() {
-        noteList = new ArrayList<>();
-        adapter = new ShowNotesAdapter(noteList, getActivity());
-        binding.noteRv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        binding.noteRv.setAdapter(adapter);
-
+        if(mediaOnly){
+            List<Note> mediaOnlyNotes = notes.stream().filter(note -> note.getImagePath() != null).collect(Collectors.toList());
+            return mediaOnlyNotes;
+        }
+        return notes;
     }
 
 
+    private void setAdapter(List<Note> notes) {
+        adapter = new ShowNotesAdapter(notes, getActivity(), this);
+        binding.noteRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        binding.noteRv.setAdapter(adapter);
+    }
+
+
+    @Override
+    public void onViewPopulated() {
+        binding.progressBar.setVisibility(View.GONE);
+    }
 }

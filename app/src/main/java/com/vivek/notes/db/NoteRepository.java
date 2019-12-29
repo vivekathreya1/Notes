@@ -17,10 +17,10 @@ public class NoteRepository {
         noteDao = db.noteDao();
     }
 
-    public LiveData<List<Note>> getAllNotes(boolean isAsc) {
+    public LiveData<List<Note>> getAllNotes() {
 
-        return noteDao.getNoteList(isAsc);
-//        return noteDao.getNoteListinDesc();
+        return noteDao.getNoteList();
+//        return noteDao.getNoteListinDesc("");
     }
 
 

@@ -29,10 +29,9 @@ public class ShowNotesViewModel extends AndroidViewModel {
         noteRepository = new NoteRepository(application);
     }
 
-    public void getDataFromDb(boolean isAsc, String mediaOnly){
-        asc = isAsc;
+    public void getDataFromDb(){
         this.mediaOnly = mediaOnly;
-        allNotes = noteRepository.getAllNotes(isAsc);
+        allNotes = noteRepository.getAllNotes();
     }
 
     public LiveData<List<Note>> getAllNotes() {

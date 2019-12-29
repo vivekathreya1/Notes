@@ -22,6 +22,8 @@ public class Note extends BaseObservable {
     private String description;
     @ColumnInfo(name = "imagePath")
     private String imagePath;
+    @ColumnInfo(name = "imageExists")
+    private Boolean imageExists;
 
 
     public int getId() {
@@ -70,10 +72,19 @@ public class Note extends BaseObservable {
         this.imagePath = imagePath;
     }
 
-    public Note(Long creationTime, String title, String description, String imagePath) {
+    public Note(Long creationTime, String title, String description, String imagePath, Boolean imageExists) {
         this.creationTime = creationTime;
         this.title = title;
         this.description = description;
         this.imagePath = imagePath;
+        this.imageExists = imageExists;
+    }
+
+    public Boolean getImageExists() {
+        return imageExists;
+    }
+
+    public void setImageExists(Boolean imageExists) {
+        this.imageExists = imageExists;
     }
 }

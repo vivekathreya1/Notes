@@ -9,7 +9,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.vivek.notes.db.NoteRepository;
 import com.vivek.notes.model.Note;
-import com.vivek.notes.utils.Constants;
 
 public class AddNoteViewModel extends AndroidViewModel {
 
@@ -19,6 +18,7 @@ public class AddNoteViewModel extends AndroidViewModel {
     private MutableLiveData<String> title = new MutableLiveData<>();
     private MutableLiveData<String> desc = new MutableLiveData<>();
     public MutableLiveData<String> imageFilePath = new MutableLiveData<>();
+    public Boolean imageExists = false;
     private MutableLiveData<Boolean> noteCreated = new MutableLiveData<>();
 
     public AddNoteViewModel(@NonNull Application application) {
@@ -28,12 +28,10 @@ public class AddNoteViewModel extends AndroidViewModel {
 
 
     public void createNote(View view){
-
-        if(imageFilePath.getValue() == null){
-            imageFilePath.setValue(Constants.NO_IMAGE);
+        if(imageFilePath.getValue()!= null){
+            imageExists = true;
         }
-
-       long id =  noteRepository.insert(new Note(System.currentTimeMillis(), title.getValue(), desc.getValue(), imageFilePath.getValue()));
+       long id =  noteRepository.insert(new Note(System.currentTimeMillis(), title.getValue(), desc.getValue(), imageFilePath.getValue(), imageExists));
        if(id > 0){
            noteCreated.setValue(true);
        }else{

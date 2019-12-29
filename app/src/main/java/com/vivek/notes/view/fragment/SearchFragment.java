@@ -22,7 +22,7 @@ import com.vivek.notes.viewmodel.SearchViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment implements ShowNotesAdapter.AdapterCallback {
 
     private FragmentSearchBinding binding;
     private View rootView;
@@ -52,6 +52,7 @@ public class SearchFragment extends Fragment {
             public boolean onQueryTextSubmit(String query) {
                 if (!query.trim().isEmpty()) {
                     viewModel.searchNotes(query);
+                    binding.searchView.clearFocus();
 //                    binding.loadingProgressBar.setVisibility(View.VISIBLE);
                 }
                 return false;
@@ -84,10 +85,14 @@ public class SearchFragment extends Fragment {
 
     private void setAdapter() {
         noteList = new ArrayList<>();
-        adapter = new ShowNotesAdapter(noteList, getActivity());
+        adapter = new ShowNotesAdapter(noteList, getActivity(), this);
         binding.searchResultsRv.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.searchResultsRv.setAdapter(adapter);
 
     }
 
+    @Override
+    public void onViewPopulated() {
+
+    }
 }

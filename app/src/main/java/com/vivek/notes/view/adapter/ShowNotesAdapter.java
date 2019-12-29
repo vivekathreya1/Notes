@@ -19,11 +19,16 @@ public class ShowNotesAdapter extends RecyclerView.Adapter<ShowNotesAdapter.Show
 
     private List<Note> notesList;
     private Context context;
+    private AdapterCallback callback;
 
 
-    public ShowNotesAdapter(List<Note> notesList, Context context) {
+    public interface AdapterCallback{
+        void onViewPopulated();
+    }
+    public ShowNotesAdapter(List<Note> notesList, Context context, AdapterCallback callback) {
         this.notesList = notesList;
         this.context = context;
+        this.callback = callback;
     }
 
     @NonNull
@@ -36,6 +41,9 @@ public class ShowNotesAdapter extends RecyclerView.Adapter<ShowNotesAdapter.Show
     @Override
     public void onBindViewHolder(@NonNull ShowNotesRecyclerViewHolder holder, int position) {
         holder.bind(notesList.get(position));
+        if(position == notesList.size()-1){
+            callback.onViewPopulated();
+        }
     }
 
     @Override
